@@ -37,12 +37,13 @@ class CrateMover9000(CrateMover):
 
 class CrateMover9001(CrateMover):
     def move_crates(self, stack: list, movement: dict):
-        pass
-
+        items_to_move = stack[movement['origin']-1][-movement['amount']:]
+        del stack[movement['origin']-1][-movement['amount']:]
+        stack[movement['destination']-1].extend(items_to_move)
+        return stack
 
 def crate_movements(lines: list, end_of_header: int, 
                     stack: list, mover: CrateMover) -> list:
-
     for line in lines[end_of_header+2:]:
         moving  = re.findall(r' \d+', line)
         amount = int(moving[0])
@@ -74,7 +75,26 @@ with open('input.txt') as f:
     for single_stack in stack:
         result_list.append(single_stack[-1])
 
-    print(result_list)
+    print("Part 1 results: ", result_list)
+
+
+# part 2
+with open('input.txt') as f:
+    lines = f.readlines()
+
+    stack_numbers, end_of_header = read_header(lines)
+
+    stack = create_stacks(lines, stack_numbers, end_of_header)
+   
+    MuddyMover = CrateMover9001()
+    stack = crate_movements(lines, end_of_header, stack, MuddyMover)
+
+    # get last items
+    result_list = []
+    for single_stack in stack:
+        result_list.append(single_stack[-1])
+
+    print("Part 2 results: ", result_list)
 
 
 
