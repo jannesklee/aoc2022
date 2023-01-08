@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import numpy as np
 
 def find_unique_key(key, dictionary):
     if key in dictionary.keys():
@@ -49,5 +50,18 @@ for foldername in foldersize:
     if foldersize[foldername] <= 100000:
         total_sum = total_sum + foldersize[foldername]
 
-print(total_sum)
+print("Result of part 1: ", total_sum)
+
+total_disk_size = 70000000
+update_size = 30000000
+total_used_space = foldersize['/']
+needed_space = update_size - (total_disk_size - total_used_space)
+
+possible_folders = []
+for foldername in foldersize:
+    if foldersize[foldername] >= needed_space:
+        possible_folders.append(foldersize[foldername])
+
+print("Result of part 2: ", min(possible_folders))
+
 
